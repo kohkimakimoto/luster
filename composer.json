@@ -1,6 +1,9 @@
 {
     "name": "kohkimakimoto/luster",
     "description": "A command line application framework based on Laravel.",
+    "keywords": ["cli"],
+    "license": "MIT",
+    "homepage": "https://github.com/kohkimakimoto/luster",
     "require": {
         "php": ">=5.4.0",
         "symfony/process": "2.6.*",
