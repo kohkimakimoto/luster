@@ -3,7 +3,7 @@
     "description": "A command line application framework based on Laravel.",
     "require": {
         "php": ">=5.4.0",
-        "symfony/console": "2.6.*",
+        "symfony/process": "2.6.*",
         "illuminate/contracts": "5.0.*",
         "illuminate/database": "5.0.*",
         "illuminate/container": "5.0.*",
