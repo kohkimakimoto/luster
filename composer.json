@@ -23,7 +23,7 @@
             "Kohkimakimoto\\Luster\\": "src/"
         },
         "classmap": [
-            "src/Foundation"
+            "src/Foundation/Composer.php"
         ],
         "files": []
     },
