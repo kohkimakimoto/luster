@@ -1,0 +1,7 @@
+/vendor
+.DS_Store
+Thumbs.db
+/.tags*
+._*
+*.iml
+!.gitkeep
