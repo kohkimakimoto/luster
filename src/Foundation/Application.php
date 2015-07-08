@@ -59,7 +59,7 @@ class Application extends Container implements LaravelApplicationContract
     /**
      * constructor.
      */
-    public function __construct($params = [])
+    public function __construct($name = "luster", $version = "dev")
     {
         if (!ini_get('date.timezone')) {
             date_default_timezone_set('UTC');
@@ -72,11 +72,9 @@ class Application extends Container implements LaravelApplicationContract
             $cwd = ".";
         }
 
-        $params = array_merge(['name' => 'luster', 'version' => 'dev', 'basePath' => $cwd], $params);
-
-        $this->name = $params['name'];
-        $this->version = $params['version'];
-        $this->basePath = $params['basePath'];
+        $this->name = $name;
+        $this->version = $version;
+        $this->basePath = $cwd;
 
         $this->registerBaseBindingsAndServiceProviders();
 
@@ -299,7 +297,7 @@ class Application extends Container implements LaravelApplicationContract
         if (!is_dir($this->configPath())) {
             return;
         }
-        
+
         //
         // It refers to https://raw.githubusercontent.com/laravel/framework/5.0/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php
         //
