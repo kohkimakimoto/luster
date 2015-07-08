@@ -6,13 +6,13 @@ A command line application framework based on Laravel.
 
 ## Installation
 
-Run the `composer require` command.
+Runs `composer require` command like below.
 
 ```
 composer require kohkimakimoto/luster
 ```
 
-Run init command.
+Runs init command.
 
 ```
 php vendor/bin/luster init
