@@ -16,6 +16,42 @@ class InitCommand extends Command
 
         $rootDir = getcwd();
 
+        // binDir
+        $binDir = $rootDir."/bin";
+        if (!$filesystem->exists($binDir)) {
+            $filesystem->makeDirectory($binDir, 0755, true);
+            $this->output->writeln("<info>Created <comment>".$binDir."</comment></info>");
+        }
+
+        $commandName = basename($rootDir);
+        $binCommandFile = $binDir."/".$commandName;
+        if (!$filesystem->exists($binCommandFile)) {
+            $contents = <<<EOF
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Kohkimakimoto\Luster\Foundation\Application;
+
+\$app = new Application();
+\$app->useBasePath(realpath(__DIR__."/.."));
+\$app->register([
+    'Illuminate\Database\DatabaseServiceProvider',
+    'Illuminate\Database\MigrationServiceProvider',
+    'Illuminate\Database\SeedServiceProvider',
+]);
+\$app->command([
+    'Kohkimakimoto\Luster\Commands\ConfigCommand',
+]);
+
+\$app->run();
+
+EOF;
+            $filesystem->put($binCommandFile, $contents);
+            chmod($binCommandFile, 0755);
+            $this->output->writeln("<info>Created <comment>".$binCommandFile."</comment></info>");
+        }
+
         // config
         $configDir = $rootDir."/config";
         if (!$filesystem->exists($configDir)) {
