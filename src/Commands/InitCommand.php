@@ -33,7 +33,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Kohkimakimoto\Luster\Foundation\Application;
 
-\$app = new Application();
+\$app = new Application("$commandName", "0.1.0");
 \$app->useBasePath(realpath(__DIR__."/.."));
 \$app->register([
     'Illuminate\Database\DatabaseServiceProvider',

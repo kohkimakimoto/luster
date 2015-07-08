@@ -10,7 +10,7 @@ if (is_file(__DIR__ . '/../vendor/autoload.php')) {
 
 use Kohkimakimoto\Luster\Foundation\Application;
 
-$app = new Application();
+$app = new Application("luster", "5.0.x");
 $app->useBasePath(realpath(__DIR__."/.."));
 $app->register([
 //    'Illuminate\Database\DatabaseServiceProvider',
