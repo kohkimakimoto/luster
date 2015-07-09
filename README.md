@@ -33,14 +33,21 @@ composer install
 
 ### Getting Started
 
-Run a `luster init`.
+Run a `luster init` to create your command line app project files.
 
 ```
 php vendor/bin/luster init
 ```
 
-WIP.
+You will get some directories and files. Look at `bin/cmd`. It is the executable command file to bootstrap the app. You should rename it.
 
+Run this command.
+
+```
+php bin/cmd
+```
+
+WIP...
 
 ## Author
 
