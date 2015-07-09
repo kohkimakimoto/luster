@@ -90,7 +90,7 @@ $app->run();
 
 Uncomment the line inside of `$app->command([...])` method.
 
-```
+```php
 $app->command([
     'Kohkimakimoto\Luster\Commands\HelloCommand',
 ]);
