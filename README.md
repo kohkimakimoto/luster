@@ -1,5 +1,7 @@
 # Luster
 
+[![Build Status](https://travis-ci.org/kohkimakimoto/luster.svg)](https://travis-ci.org/kohkimakimoto/luster)
+
 A command line application framework based on Laravel.
 
 > This product is in beta stage!
