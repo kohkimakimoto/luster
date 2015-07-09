@@ -16,11 +16,10 @@ use InvalidArgumentException;
 class Application extends Container implements LaravelApplicationContract
 {
     /**
-     * The base path for the Laravel installation.
-     *
-     * @var string
+     * Name of the application.
+     * @var [type]
      */
-    protected $basePath;
+    protected $name;
 
     /**
      * Vertion of the application.
@@ -28,6 +27,13 @@ class Application extends Container implements LaravelApplicationContract
      * @var string
      */
     protected $version;
+
+    /**
+     * The base path for the Laravel installation.
+     *
+     * @var string
+     */
+    protected $basePath;
 
     /**
      * The custom database path defined by the developer.
@@ -87,6 +93,16 @@ class Application extends Container implements LaravelApplicationContract
         $this->registerBaseBindingsAndServiceProviders();
         $this->registerBaseFacades();
         $this->registerCli($this->name, $this->version);
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getVersion()
+    {
+        return $this->version;
     }
 
 	/**

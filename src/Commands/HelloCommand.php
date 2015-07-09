@@ -12,6 +12,7 @@ class HelloCommand extends Command
 
     public function fire()
     {
-        $this->output->writeln("Hello world!");
+        $app = $this->laravel['app'];
+        $this->output->writeln("Hello world! - ".$app->getName().":".$app->getVersion());
     }
 }
