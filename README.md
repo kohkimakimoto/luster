@@ -33,18 +33,42 @@ composer install
 
 ### Getting Started
 
-Run a `luster init` to create your command line app project files.
+Run `luster init` to create your command line app project files.
 
 ```
 php vendor/bin/luster init
 ```
 
-You will get some directories and files. Look at `bin/cmd`. It is the executable command file to bootstrap the app. You should rename it.
+You will get some directories and files. Look at `bin/cmd`. It is a executable command file to bootstrap the app. You should rename it.
 
 Run this command.
 
 ```
 php bin/cmd
+```
+
+Did you get messages like the following? It is OK. Luster has been installed correctly.
+
+```
+cmd version 0.1.0
+
+Usage:
+ command [options] [arguments]
+
+Options:
+ --help (-h)           Display this help message
+ --quiet (-q)          Do not output any message
+ --verbose (-v|vv|vvv) Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+ --version (-V)        Display this application version
+ --ansi                Force ANSI output
+ --no-ansi             Disable ANSI output
+...
+```
+
+Let's start developing your command line app. Open `bin/cmd` file.
+
+```
+
 ```
 
 WIP...

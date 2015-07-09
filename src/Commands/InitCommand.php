@@ -36,13 +36,12 @@ use Kohkimakimoto\Luster\Foundation\Application;
 \$app = new Application("$commandName", "0.1.0");
 \$app->setBasePath(realpath(__DIR__."/.."));
 \$app->register([
-    'Illuminate\Database\DatabaseServiceProvider',
-    'Illuminate\Database\MigrationServiceProvider',
-    'Illuminate\Database\SeedServiceProvider',
+    // 'Illuminate\Database\DatabaseServiceProvider',
+    // 'Illuminate\Database\MigrationServiceProvider',
+    // 'Illuminate\Database\SeedServiceProvider',
 ]);
 \$app->command([
-    'Kohkimakimoto\Luster\Commands\HelloCommand',
-    'Kohkimakimoto\Luster\Commands\ConfigCommand',
+    // 'Kohkimakimoto\Luster\Commands\HelloCommand',
 ]);
 
 \$app->run();
