@@ -1,19 +1,41 @@
 # Luster
 
+[![Build Status](https://travis-ci.org/kohkimakimoto/luster.svg)](https://travis-ci.org/kohkimakimoto/luster)
+
 A command line application framework based on Laravel.
 
 > This product is in beta stage!
 
+## Requirements
+
+* PHP5.4 or later
+
 ## Installation
 
-Runs `composer require` command like below.
+Create `composer.json` for installing via composer..
 
 ```
-composer require kohkimakimoto/luster
+{
+    "require": {
+        "kohkimakimoto/luster": "5.0.*"
+    }
+}
 ```
 
-Runs init command.
+Run composer install command.
 
 ```
-php vendor/bin/luster init
+composer install
 ```
+
+## Usage
+
+WIP.
+
+## Author
+
+Kohki Makimoto <kohki.makimoto@gmail.com>
+
+## License
+
+MIT license.

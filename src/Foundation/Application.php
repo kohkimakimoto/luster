@@ -7,8 +7,11 @@ use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application as LaravelApplicationContract;
 use Illuminate\Foundation\Composer;
+use Illuminate\Support\Facades\Facade;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Dotenv;
+use InvalidArgumentException;
 
 class Application extends Container implements LaravelApplicationContract
 {
@@ -47,8 +50,6 @@ class Application extends Container implements LaravelApplicationContract
      */
     protected $configPath;
 
-    protected $environment;
-
     /**
      * The names of the loaded service providers.
      *
@@ -56,10 +57,17 @@ class Application extends Container implements LaravelApplicationContract
      */
     protected $loadedProviders = array();
 
+	/**
+	 * The environment file to load during bootstrapping.
+	 *
+	 * @var string
+	 */
+	protected $environmentFile = '.env';
+
     /**
      * constructor.
      */
-    public function __construct($name = "luster", $version = "dev")
+    public function __construct($name = 'luster', $version = 'dev')
     {
         if (!ini_get('date.timezone')) {
             date_default_timezone_set('UTC');
@@ -69,7 +77,7 @@ class Application extends Container implements LaravelApplicationContract
 
         $cwd = getcwd();
         if (!$cwd) {
-            $cwd = ".";
+            $cwd = '.';
         }
 
         $this->name = $name;
@@ -77,7 +85,7 @@ class Application extends Container implements LaravelApplicationContract
         $this->basePath = $cwd;
 
         $this->registerBaseBindingsAndServiceProviders();
-
+        $this->registerBaseFacades();
         $this->registerCli($this->name, $this->version);
     }
 
@@ -180,7 +188,8 @@ class Application extends Container implements LaravelApplicationContract
     /**
      * Set a custom configuration path for the application.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return $this
      */
     public function useConfigPath($path)
@@ -192,15 +201,33 @@ class Application extends Container implements LaravelApplicationContract
         return $this;
     }
 
-    public function setEnvironment($env)
-    {
-        $this->environment = $env;
-    }
-
     public function environment()
     {
-        return $this->environment ?: 'production';
+        return $this['env'];
     }
+
+	/**
+	 * Set the environment file to be loaded during bootstrapping.
+	 *
+	 * @param  string  $file
+	 * @return $this
+	 */
+	public function loadEnvironmentFrom($file)
+	{
+		$this->environmentFile = $file;
+
+		return $this;
+	}
+
+	/**
+	 * Get the environment file the application is using.
+	 *
+	 * @return string
+	 */
+	public function environmentFile()
+	{
+		return $this->environmentFile ?: '.env';
+	}
 
     public function isDownForMaintenance()
     {
@@ -220,14 +247,33 @@ class Application extends Container implements LaravelApplicationContract
         static::setInstance($this);
 
         $this->instance('app', $this);
+
         $this->register('Illuminate\Events\EventServiceProvider');
         $this->register('Illuminate\Filesystem\FilesystemServiceProvider');
+        $this->register('Illuminate\View\ViewServiceProvider');
+
         $this->singleton('config', function () {
             return new Repository();
         });
         $this->singleton('composer', function ($app) {
             return new Composer($app->make('files'), $this->basePath());
         });
+    }
+
+    protected function registerBaseFacades()
+    {
+        Facade::clearResolvedInstances();
+        Facade::setFacadeApplication($this);
+
+        class_alias('Illuminate\Support\Facades\App', 'App');
+        class_alias('Illuminate\Support\Facades\Schema', 'Schema');
+        class_alias('Illuminate\Support\Facades\Event', 'Event');
+        class_alias('Illuminate\Support\Facades\DB', 'DB');
+        class_alias('Illuminate\Database\Eloquent\Model', 'Eloquent');
+        class_alias('Illuminate\Support\Facades\File', 'File');
+        class_alias('Illuminate\Support\Facades\Config', 'Config');
+        class_alias('Illuminate\Support\Facades\Blade', 'Blade');
+        class_alias('Illuminate\Support\Facades\View', 'View');
     }
 
     protected function registerCli($name, $version)
@@ -258,9 +304,8 @@ class Application extends Container implements LaravelApplicationContract
         if (array_key_exists($providerName = get_class($provider), $this->loadedProviders)) {
             return;
         }
-        $this->loadedProviders[$providerName] = true;
+        $this->loadedProviders[$providerName] = $provider;
         $provider->register();
-        $provider->boot();
     }
 
     public function registerDeferredProvider($provider, $service = null)
@@ -303,46 +348,47 @@ class Application extends Container implements LaravelApplicationContract
         //
 
         foreach ($this->getConfigurationFiles() as $key => $path) {
-			$this['config']->set($key, require $path);
-		}
+            $this['config']->set($key, require $path);
+        }
     }
 
-	/**
-	 * Get all of the configuration files for the application.
-	 *
-	 * @param  \Illuminate\Contracts\Foundation\Application  $app
-	 * @return array
-	 */
-	protected function getConfigurationFiles()
-	{
-		$files = [];
+    /**
+     * Get all of the configuration files for the application.
+     *
+     * @param \Illuminate\Contracts\Foundation\Application $app
+     *
+     * @return array
+     */
+    protected function getConfigurationFiles()
+    {
+        $files = [];
 
-		foreach (Finder::create()->files()->name('*.php')->in($this->configPath()) as $file)
-		{
-			$nesting = $this->getConfigurationNesting($file);
-			$files[$nesting.basename($file->getRealPath(), '.php')] = $file->getRealPath();
-		}
+        foreach (Finder::create()->files()->name('*.php')->in($this->configPath()) as $file) {
+            $nesting = $this->getConfigurationNesting($file);
+            $files[$nesting.basename($file->getRealPath(), '.php')] = $file->getRealPath();
+        }
 
-		return $files;
-	}
+        return $files;
+    }
 
-	/**
-	 * Get the configuration file nesting path.
-	 *
-	 * @param  \Symfony\Component\Finder\SplFileInfo  $file
-	 * @return string
-	 */
-	private function getConfigurationNesting(SplFileInfo $file)
-	{
-		$directory = dirname($file->getRealPath());
+    /**
+     * Get the configuration file nesting path.
+     *
+     * @param \Symfony\Component\Finder\SplFileInfo $file
+     *
+     * @return string
+     */
+    private function getConfigurationNesting(SplFileInfo $file)
+    {
+        $directory = dirname($file->getRealPath());
         $configPath = realpath($this->configPath());
 
-		if ($tree = trim(str_replace($configPath, '', $directory), DIRECTORY_SEPARATOR)) {
-			$tree = str_replace(DIRECTORY_SEPARATOR, '.', $tree).'.';
-		}
+        if ($tree = trim(str_replace($configPath, '', $directory), DIRECTORY_SEPARATOR)) {
+            $tree = str_replace(DIRECTORY_SEPARATOR, '.', $tree).'.';
+        }
 
-		return $tree;
-	}
+        return $tree;
+    }
 
     public function add($command)
     {
@@ -366,9 +412,36 @@ class Application extends Container implements LaravelApplicationContract
         $this->add($command);
     }
 
+    protected function detectEnvironment()
+    {
+		try {
+			Dotenv::load($this->basePath(), $this->environmentFile());
+		} catch (InvalidArgumentException $e) {
+
+        }
+
+        $env = env('APP_ENV', 'production');
+
+        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
+        $value = array_first($args, function($k, $v) {
+			return starts_with($v, '--env');
+		});
+
+		if (!is_null($value)) {
+			$env = head(array_slice(explode('=', $value), 1));
+		}
+
+        $this['env'] = $env;
+    }
+
     public function run()
     {
+        $this->detectEnvironment();
         $this->loadConfiguration();
+
+        foreach ($this->loadedProviders as $name => $provider) {
+            $provider->boot();
+        }
 
         return $this['cli']->run();
     }

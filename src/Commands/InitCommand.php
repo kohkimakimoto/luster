@@ -17,14 +17,14 @@ class InitCommand extends Command
         $rootDir = getcwd();
 
         // binDir
-        $binDir = $rootDir."/bin";
+        $binDir = $rootDir.'/bin';
         if (!$filesystem->exists($binDir)) {
             $filesystem->makeDirectory($binDir, 0755, true);
-            $this->output->writeln("<info>Created <comment>".$binDir."</comment></info>");
+            $this->output->writeln('<info>Created <comment>'.$binDir.'</comment></info>');
         }
 
         $commandName = basename($rootDir);
-        $binCommandFile = $binDir."/".$commandName;
+        $binCommandFile = $binDir.'/'.$commandName;
         if (!$filesystem->exists($binCommandFile)) {
             $contents = <<<EOF
 #!/usr/bin/env php
@@ -41,6 +41,7 @@ use Kohkimakimoto\Luster\Foundation\Application;
     'Illuminate\Database\SeedServiceProvider',
 ]);
 \$app->command([
+    'Kohkimakimoto\Luster\Commands\HelloCommand',
     'Kohkimakimoto\Luster\Commands\ConfigCommand',
 ]);
 
@@ -49,18 +50,18 @@ use Kohkimakimoto\Luster\Foundation\Application;
 EOF;
             $filesystem->put($binCommandFile, $contents);
             chmod($binCommandFile, 0755);
-            $this->output->writeln("<info>Created <comment>".$binCommandFile."</comment></info>");
+            $this->output->writeln('<info>Created <comment>'.$binCommandFile.'</comment></info>');
         }
 
         // config
-        $configDir = $rootDir."/config";
+        $configDir = $rootDir.'/config';
         if (!$filesystem->exists($configDir)) {
             $filesystem->makeDirectory($configDir, 0755, true);
-            $this->output->writeln("<info>Created <comment>".$configDir."</comment></info>");
+            $this->output->writeln('<info>Created <comment>'.$configDir.'</comment></info>');
         }
 
         // config/database.php
-        $configDatabaseFile = $configDir."/database.php";
+        $configDatabaseFile = $configDir.'/database.php';
         if (!$filesystem->exists($configDatabaseFile)) {
             $contents = <<<EOF
 <?php
@@ -79,28 +80,35 @@ return [
 
 EOF;
             $filesystem->put($configDatabaseFile, $contents);
-            $this->output->writeln("<info>Created <comment>".$configDatabaseFile."</comment></info>");
+            $this->output->writeln('<info>Created <comment>'.$configDatabaseFile.'</comment></info>');
         }
 
         // database/migrations
-        $databaseMigrationsDir = $rootDir."/database/migrations";
+        $databaseMigrationsDir = $rootDir.'/database/migrations';
         if (!$filesystem->exists($databaseMigrationsDir)) {
             $filesystem->makeDirectory($databaseMigrationsDir, 0755, true);
-            $this->output->writeln("<info>Created <comment>".$databaseMigrationsDir."</comment></info>");
+            $this->output->writeln('<info>Created <comment>'.$databaseMigrationsDir.'</comment></info>');
         }
 
         // storage
-        $storageDir = $rootDir."/storage";
+        $storageDir = $rootDir.'/storage';
         if (!$filesystem->exists($storageDir)) {
             $filesystem->makeDirectory($storageDir, 0755, true);
-            $this->output->writeln("<info>Created <comment>".$storageDir."</comment></info>");
+            $this->output->writeln('<info>Created <comment>'.$storageDir.'</comment></info>');
         }
 
         // storage/database.sqlite
-        $storageDatabaseFile = $storageDir."/database.sqlite";
+        $storageDatabaseFile = $storageDir.'/database.sqlite';
         if (!$filesystem->exists($storageDatabaseFile)) {
             $filesystem->put($storageDatabaseFile, null);
-            $this->output->writeln("<info>Created <comment>".$storageDatabaseFile."</comment></info>");
+            $this->output->writeln('<info>Created <comment>'.$storageDatabaseFile.'</comment></info>');
+        }
+
+        // srcDir
+        $srcDir = $rootDir.'/src';
+        if (!$filesystem->exists($srcDir)) {
+            $filesystem->makeDirectory($srcDir, 0755, true);
+            $this->output->writeln('<info>Created <comment>'.$srcDir.'</comment></info>');
         }
     }
 }

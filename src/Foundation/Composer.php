@@ -4,6 +4,7 @@
 // This file was copied https://raw.githubusercontent.com/laravel/lumen-framework/5.0/src/Foundation/Composer.php.
 //
 
+
 namespace Illuminate\Foundation;
 
 use Illuminate\Filesystem\Filesystem;
