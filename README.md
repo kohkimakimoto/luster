@@ -65,10 +65,35 @@ Options:
 ...
 ```
 
-Let's start developing your command line app. Open `bin/cmd` file.
+Let's start developing your command line app. Open `bin/cmd` file by your text editor.
 
 ```
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
 
+use Kohkimakimoto\Luster\Foundation\Application;
+
+$app = new Application("cmd", "0.1.0");
+$app->setBasePath(realpath(__DIR__."/.."));
+$app->register([
+    // 'Illuminate\Database\DatabaseServiceProvider',
+    // 'Illuminate\Database\MigrationServiceProvider',
+    // 'Illuminate\Database\SeedServiceProvider',
+]);
+$app->command([
+    // 'Kohkimakimoto\Luster\Commands\HelloCommand',
+]);
+
+$app->run();
+```
+
+Uncomment the line inside of `$app->command([...])` method.
+
+```
+$app->command([
+    'Kohkimakimoto\Luster\Commands\HelloCommand',
+]);
 ```
 
 WIP...
