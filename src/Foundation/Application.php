@@ -9,6 +9,7 @@ use Illuminate\Contracts\Foundation\Application as LaravelApplicationContract;
 use Illuminate\Foundation\Composer;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Illuminate\Support\Facades\Facade;
 
 class Application extends Container implements LaravelApplicationContract
 {
@@ -77,7 +78,7 @@ class Application extends Container implements LaravelApplicationContract
         $this->basePath = $cwd;
 
         $this->registerBaseBindingsAndServiceProviders();
-
+        $this->registerBaseFacades();
         $this->registerCli($this->name, $this->version);
     }
 
@@ -228,6 +229,20 @@ class Application extends Container implements LaravelApplicationContract
         $this->singleton('composer', function ($app) {
             return new Composer($app->make('files'), $this->basePath());
         });
+    }
+
+    protected function registerBaseFacades()
+    {
+		Facade::clearResolvedInstances();
+		Facade::setFacadeApplication($this);
+
+        class_alias('Illuminate\Support\Facades\App', 'App');
+        class_alias('Illuminate\Support\Facades\Schema', 'Schema');
+        class_alias('Illuminate\Support\Facades\Event', 'Event');
+        class_alias('Illuminate\Support\Facades\DB', 'DB');
+        class_alias('Illuminate\Database\Eloquent\Model', 'Eloquent');
+        class_alias('Illuminate\Support\Facades\File', 'File');
+        class_alias('Illuminate\Support\Facades\Config', 'Config');
     }
 
     protected function registerCli($name, $version)

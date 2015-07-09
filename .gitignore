@@ -3,6 +3,7 @@
 Thumbs.db
 /composer.lock
 /.tags*
+/tmp
 ._*
 *.iml
 !.gitkeep
