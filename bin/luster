@@ -13,12 +13,8 @@ use Kohkimakimoto\Luster\Foundation\Application;
 $app = new Application("luster", "5.0.x");
 $app->useBasePath(realpath(__DIR__."/.."));
 $app->register([
-//    'Illuminate\Database\DatabaseServiceProvider',
-//    'Illuminate\Database\MigrationServiceProvider',
-//    'Illuminate\Database\SeedServiceProvider',
 ]);
 $app->command([
-    'Kohkimakimoto\Luster\Commands\ConfigCommand',
     'Kohkimakimoto\Luster\Commands\InitCommand'
 ]);
 
