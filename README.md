@@ -67,7 +67,7 @@ Options:
 
 Let's start developing your command line app. Open `bin/cmd` file by your text editor.
 
-```
+```php
 #!/usr/bin/env php
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
