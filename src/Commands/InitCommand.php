@@ -41,6 +41,7 @@ use Kohkimakimoto\Luster\Foundation\Application;
     'Illuminate\Database\SeedServiceProvider',
 ]);
 \$app->command([
+    'Kohkimakimoto\Luster\Commands\HelloCommand',
     'Kohkimakimoto\Luster\Commands\ConfigCommand',
 ]);
 
@@ -101,6 +102,13 @@ EOF;
         if (!$filesystem->exists($storageDatabaseFile)) {
             $filesystem->put($storageDatabaseFile, null);
             $this->output->writeln('<info>Created <comment>'.$storageDatabaseFile.'</comment></info>');
+        }
+
+        // srcDir
+        $srcDir = $rootDir.'/src';
+        if (!$filesystem->exists($srcDir)) {
+            $filesystem->makeDirectory($srcDir, 0755, true);
+            $this->output->writeln('<info>Created <comment>'.$srcDir.'</comment></info>');
         }
     }
 }
