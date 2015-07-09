@@ -23,7 +23,7 @@ class InitCommand extends Command
             $this->output->writeln('<info>Created <comment>'.$binDir.'</comment></info>');
         }
 
-        $commandName = basename($rootDir);
+        $commandName = "cmd";
         $binCommandFile = $binDir.'/'.$commandName;
         if (!$filesystem->exists($binCommandFile)) {
             $contents = <<<EOF
@@ -34,7 +34,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Kohkimakimoto\Luster\Foundation\Application;
 
 \$app = new Application("$commandName", "0.1.0");
-\$app->useBasePath(realpath(__DIR__."/.."));
+\$app->setBasePath(realpath(__DIR__."/.."));
 \$app->register([
     'Illuminate\Database\DatabaseServiceProvider',
     'Illuminate\Database\MigrationServiceProvider',
