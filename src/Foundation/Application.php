@@ -247,8 +247,11 @@ class Application extends Container implements LaravelApplicationContract
         static::setInstance($this);
 
         $this->instance('app', $this);
+
         $this->register('Illuminate\Events\EventServiceProvider');
         $this->register('Illuminate\Filesystem\FilesystemServiceProvider');
+        $this->register('Illuminate\View\ViewServiceProvider');
+
         $this->singleton('config', function () {
             return new Repository();
         });
@@ -269,6 +272,8 @@ class Application extends Container implements LaravelApplicationContract
         class_alias('Illuminate\Database\Eloquent\Model', 'Eloquent');
         class_alias('Illuminate\Support\Facades\File', 'File');
         class_alias('Illuminate\Support\Facades\Config', 'Config');
+        class_alias('Illuminate\Support\Facades\Blade', 'Blade');
+        class_alias('Illuminate\Support\Facades\View', 'View');
     }
 
     protected function registerCli($name, $version)
