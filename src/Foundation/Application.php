@@ -82,12 +82,40 @@ class Application extends Container implements LaravelApplicationContract
 
         $this->name = $name;
         $this->version = $version;
-        $this->basePath = $cwd;
+        $this->setBasePath($cwd);
 
         $this->registerBaseBindingsAndServiceProviders();
         $this->registerBaseFacades();
         $this->registerCli($this->name, $this->version);
     }
+
+	/**
+	 * Set the base path for the application.
+	 *
+	 * @param  string  $basePath
+	 * @return $this
+	 */
+	public function setBasePath($basePath)
+	{
+		$this->basePath = $basePath;
+
+		$this->bindPathsInContainer();
+
+		return $this;
+	}
+
+	/**
+	 * Bind all of the application paths in the container.
+	 *
+	 * @return void
+	 */
+	protected function bindPathsInContainer()
+	{
+		foreach (['base', 'config', 'database', 'storage'] as $path)
+		{
+			$this->instance('path.'.$path, $this->{$path.'Path'}());
+		}
+	}
 
     /**
      * Get the version.
@@ -107,20 +135,6 @@ class Application extends Container implements LaravelApplicationContract
     public function basePath()
     {
         return $this->basePath;
-    }
-
-    /**
-     * Set the base path.
-     *
-     * @param string $path
-     *
-     * @return $this
-     */
-    public function useBasePath($path)
-    {
-        $this->basePath = $path;
-
-        return $this;
     }
 
     /**

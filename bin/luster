@@ -11,7 +11,7 @@ if (is_file(__DIR__ . '/../vendor/autoload.php')) {
 use Kohkimakimoto\Luster\Foundation\Application;
 
 $app = new Application("luster", "5.0.x");
-$app->useBasePath(realpath(__DIR__."/.."));
+$app->setBasePath(realpath(__DIR__."/.."));
 $app->command([
     'Kohkimakimoto\Luster\Commands\InitCommand'
 ]);
