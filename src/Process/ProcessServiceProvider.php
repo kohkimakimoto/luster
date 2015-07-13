@@ -12,7 +12,7 @@ class ProcessServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('process.factory', function ($app) {
-            return new Factory();
+            return new Factory($app);
         });
     }
 }

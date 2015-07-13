@@ -13,6 +13,6 @@ class Remote extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'remote.factory';
+        return 'remote.communicator';
     }
 }
