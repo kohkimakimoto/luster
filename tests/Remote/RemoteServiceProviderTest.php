@@ -29,5 +29,6 @@ class RemoteServiceProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testRunWithFacade()
     {
+        Remote::run(["host" => "127.0.0.1"], "ls -la");
     }
 }
