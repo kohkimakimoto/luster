@@ -295,15 +295,24 @@ class Application extends Container implements LaravelApplicationContract
         Facade::clearResolvedInstances();
         Facade::setFacadeApplication($this);
 
-        class_alias('Illuminate\Support\Facades\App', 'App');
-        class_alias('Illuminate\Support\Facades\Schema', 'Schema');
-        class_alias('Illuminate\Support\Facades\Event', 'Event');
-        class_alias('Illuminate\Support\Facades\DB', 'DB');
-        class_alias('Illuminate\Database\Eloquent\Model', 'Eloquent');
-        class_alias('Illuminate\Support\Facades\File', 'File');
-        class_alias('Illuminate\Support\Facades\Config', 'Config');
-        class_alias('Illuminate\Support\Facades\Blade', 'Blade');
-        class_alias('Illuminate\Support\Facades\View', 'View');
+        $this->setAliases([
+            'App' => 'Illuminate\Support\Facades\App',
+            'Event' => 'Illuminate\Support\Facades\Event',
+            'Schema' => 'Illuminate\Support\Facades\Schema',
+            'DB' => 'Illuminate\Support\Facades\DB',
+            'Eloquent' => 'Illuminate\Database\Eloquent\Model',
+            'File' => 'Illuminate\Support\Facades\File',
+            'Config' => 'Illuminate\Support\Facades\Config',
+            'Blade' => 'Illuminate\Support\Facades\Blade',
+            'View' => 'Illuminate\Support\Facades\View',
+        ]);
+    }
+
+    public function setAliases(array $aliases = array())
+    {
+        foreach ($aliases as $a => $b) {
+            class_alias($b, $a);
+        }
     }
 
     protected function registerCli($name, $version)
