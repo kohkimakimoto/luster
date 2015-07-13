@@ -32,14 +32,14 @@ class ParallelManager
         if (!function_exists('pcntl_signal') || !function_exists('pcntl_fork') || !function_exists('pcntl_wait') || !function_exists('posix_kill')) {
             $this->isParallel = false;
             if ($this->output->isDebug()) {
-                $this->output->writeln("Running serial mode.");
+                $this->output->writeln('Running serial mode.');
             }
         } else {
             $this->isParallel = true;
 
-            declare(ticks = 1);
-            pcntl_signal(SIGTERM, array($this, "signalHandler"));
-            pcntl_signal(SIGINT, array($this, "signalHandler"));
+            declare (ticks = 1);
+            pcntl_signal(SIGTERM, array($this, 'signalHandler'));
+            pcntl_signal(SIGINT, array($this, 'signalHandler'));
         }
 
         foreach ($this->entries as $key => $entry) {
@@ -51,14 +51,14 @@ class ParallelManager
             $pid = pcntl_fork();
             if ($pid === -1) {
                 // Error
-                throw new \RuntimeException("Fork Error.");
+                throw new \RuntimeException('Fork Error.');
             } elseif ($pid) {
                 // Parent process
                 $this->childPids[$pid] = $entry;
             } else {
                 // Child process
                 if ($this->output->isDebug()) {
-                    $this->output->writeln("Forked process (pid:".posix_getpid().")");
+                    $this->output->writeln('Forked process (pid:'.posix_getpid().')');
                 }
 
                 $this->doRunEntry($this->closure, $key, $entry);
@@ -72,11 +72,11 @@ class ParallelManager
             $status = null;
             $pid = pcntl_wait($status);
             if (!$pid) {
-                throw new \RuntimeException("pcntl_wait error.");
+                throw new \RuntimeException('pcntl_wait error.');
             }
 
             if (!array_key_exists($pid, $this->childPids)) {
-                throw new \RuntimeException("pcntl_wait error.".$pid);
+                throw new \RuntimeException('pcntl_wait error.'.$pid);
             }
 
             // When a child process is done, removes managed child pid.
@@ -84,7 +84,7 @@ class ParallelManager
             unset($this->childPids[$pid]);
 
             if ($this->output->isDebug()) {
-                $this->output->writeln("Finished process (pid:".$pid.")");
+                $this->output->writeln('Finished process (pid:'.$pid.')');
             }
         }
     }
@@ -105,12 +105,12 @@ class ParallelManager
     {
         switch ($signo) {
             case SIGTERM:
-                $this->output->writeln("<fg=red>Got SIGTERM.</fg=red>");
+                $this->output->writeln('<fg=red>Got SIGTERM.</fg=red>');
                 $this->killAllChildren();
                 exit;
 
             case SIGINT:
-                $this->output->writeln("<fg=red>Got SIGINT.</fg=red>");
+                $this->output->writeln('<fg=red>Got SIGINT.</fg=red>');
                 $this->killAllChildren();
                 exit;
         }

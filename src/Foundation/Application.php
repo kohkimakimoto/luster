@@ -17,6 +17,7 @@ class Application extends Container implements LaravelApplicationContract
 {
     /**
      * Name of the application.
+     *
      * @var [type]
      */
     protected $name;
@@ -63,12 +64,12 @@ class Application extends Container implements LaravelApplicationContract
      */
     protected $loadedProviders = array();
 
-	/**
-	 * The environment file to load during bootstrapping.
-	 *
-	 * @var string
-	 */
-	protected $environmentFile = '.env';
+    /**
+     * The environment file to load during bootstrapping.
+     *
+     * @var string
+     */
+    protected $environmentFile = '.env';
 
     protected static $registeredAliases = [];
 
@@ -107,33 +108,31 @@ class Application extends Container implements LaravelApplicationContract
         return $this->version;
     }
 
-	/**
-	 * Set the base path for the application.
-	 *
-	 * @param  string  $basePath
-	 * @return $this
-	 */
-	public function setBasePath($basePath)
-	{
-		$this->basePath = $basePath;
+    /**
+     * Set the base path for the application.
+     *
+     * @param string $basePath
+     *
+     * @return $this
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = $basePath;
 
-		$this->bindPathsInContainer();
+        $this->bindPathsInContainer();
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Bind all of the application paths in the container.
-	 *
-	 * @return void
-	 */
-	protected function bindPathsInContainer()
-	{
-		foreach (['base', 'config', 'database', 'storage'] as $path)
-		{
-			$this->instance('path.'.$path, $this->{$path.'Path'}());
-		}
-	}
+    /**
+     * Bind all of the application paths in the container.
+     */
+    protected function bindPathsInContainer()
+    {
+        foreach (['base', 'config', 'database', 'storage'] as $path) {
+            $this->instance('path.'.$path, $this->{$path.'Path'}());
+        }
+    }
 
     /**
      * Get the version.
@@ -238,28 +237,29 @@ class Application extends Container implements LaravelApplicationContract
         return $this['env'];
     }
 
-	/**
-	 * Set the environment file to be loaded during bootstrapping.
-	 *
-	 * @param  string  $file
-	 * @return $this
-	 */
-	public function loadEnvironmentFrom($file)
-	{
-		$this->environmentFile = $file;
+    /**
+     * Set the environment file to be loaded during bootstrapping.
+     *
+     * @param string $file
+     *
+     * @return $this
+     */
+    public function loadEnvironmentFrom($file)
+    {
+        $this->environmentFile = $file;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the environment file the application is using.
-	 *
-	 * @return string
-	 */
-	public function environmentFile()
-	{
-		return $this->environmentFile ?: '.env';
-	}
+    /**
+     * Get the environment file the application is using.
+     *
+     * @return string
+     */
+    public function environmentFile()
+    {
+        return $this->environmentFile ?: '.env';
+    }
 
     public function isDownForMaintenance()
     {
@@ -460,22 +460,21 @@ class Application extends Container implements LaravelApplicationContract
 
     protected function detectEnvironment()
     {
-		try {
-			Dotenv::load($this->basePath(), $this->environmentFile());
-		} catch (InvalidArgumentException $e) {
-
+        try {
+            Dotenv::load($this->basePath(), $this->environmentFile());
+        } catch (InvalidArgumentException $e) {
         }
 
         $env = env('APP_ENV', 'production');
 
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
-        $value = array_first($args, function($k, $v) {
-			return starts_with($v, '--env');
-		});
+        $value = array_first($args, function ($k, $v) {
+            return starts_with($v, '--env');
+        });
 
-		if (!is_null($value)) {
-			$env = head(array_slice(explode('=', $value), 1));
-		}
+        if (!is_null($value)) {
+            $env = head(array_slice(explode('=', $value), 1));
+        }
 
         $this['env'] = $env;
     }

@@ -14,6 +14,7 @@ class Executor
     public function each($arr, $callback = null)
     {
         $manager = new ParallelManager($this->app['console.input'], $this->app['console.output']);
+
         return $manager->each($arr, $callback);
     }
 }

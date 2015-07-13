@@ -4,8 +4,8 @@ namespace Kohkimakimoto\Luster\Process\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Process extends Facade {
-
+class Process extends Facade
+{
     const ERR = 'err';
     const OUT = 'out';
 
@@ -17,14 +17,13 @@ class Process extends Facade {
     const STDOUT = 1;
     const STDERR = 2;
 
-	/**
-	 * Get the registered name of the component.
-	 *
-	 * @return string
-	 */
-	protected static function getFacadeAccessor()
-	{
-		return 'process.factory';
-	}
-
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'process.factory';
+    }
 }

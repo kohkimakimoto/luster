@@ -23,7 +23,7 @@ class InitCommand extends Command
             $this->output->writeln('<info>Created <comment>'.$binDir.'</comment></info>');
         }
 
-        $commandName = "cmd";
+        $commandName = 'cmd';
         $binCommandFile = $binDir.'/'.$commandName;
         if (!$filesystem->exists($binCommandFile)) {
             $contents = <<<EOF
