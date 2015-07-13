@@ -39,7 +39,12 @@ use Kohkimakimoto\Luster\Foundation\Application;
     // 'Illuminate\Database\DatabaseServiceProvider',
     // 'Illuminate\Database\MigrationServiceProvider',
     // 'Illuminate\Database\SeedServiceProvider',
+    // 'Kohkimakimoto\Luster\Process\ProcessServiceProvider',
 ]);
+$app->setAliases([
+    // 'Process' => 'Kohkimakimoto\Luster\Process\Facades\Process',
+]);
+
 \$app->command([
     // 'Kohkimakimoto\Luster\Commands\HelloCommand',
 ]);

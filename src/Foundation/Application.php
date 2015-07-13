@@ -70,6 +70,8 @@ class Application extends Container implements LaravelApplicationContract
 	 */
 	protected $environmentFile = '.env';
 
+    protected static $registeredAliases = [];
+
     /**
      * constructor.
      */
@@ -311,7 +313,12 @@ class Application extends Container implements LaravelApplicationContract
     public function setAliases(array $aliases = array())
     {
         foreach ($aliases as $a => $b) {
+            if (isset(static::$registeredAliases[$a])) {
+                continue;
+            }
+
             class_alias($b, $a);
+            static::$registeredAliases[$a] = true;
         }
     }
 

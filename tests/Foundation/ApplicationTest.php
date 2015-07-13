@@ -1,5 +1,5 @@
 <?php
-namespace Test\Kohkimakimoto\Luster;
+namespace Test\Kohkimakimoto\Luster\Foundation;
 
 use Kohkimakimoto\Luster\Foundation\Application;
 

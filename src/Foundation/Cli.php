@@ -166,6 +166,9 @@ class Cli extends SymfonyApplication implements ApplicationContract
     {
         $this->events->fire('artisan.start', [$this]);
 
+        $this->laravel->instance('console.input', $input);
+        $this->laravel->instance('console.output', $output);
+
         return parent::doRun($input, $output);
     }
 }
