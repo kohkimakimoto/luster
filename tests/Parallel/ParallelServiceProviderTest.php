@@ -30,7 +30,7 @@ class ParallelServiceProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testEachWithFacade()
     {
-        Parallel::each(["web1", "web2"], function($e){
+        Parallel::each(["web1", "web2"], function($i, $e){
             // checks just running.
         });
     }

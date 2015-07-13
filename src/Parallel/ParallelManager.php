@@ -2,6 +2,8 @@
 
 namespace Kohkimakimoto\Luster\Parallel;
 
+use ReflectionFunction;
+
 class ParallelManager
 {
     protected $entries;
@@ -40,9 +42,9 @@ class ParallelManager
             pcntl_signal(SIGINT, array($this, "signalHandler"));
         }
 
-        foreach ($this->entries as $entry) {
+        foreach ($this->entries as $key => $entry) {
             if (!$this->isParallel) {
-                $this->doRunEntry($this->closure, $entry);
+                $this->doRunEntry($this->closure, $key, $entry);
                 continue;
             }
 
@@ -59,7 +61,7 @@ class ParallelManager
                     $this->output->writeln("Forked process (pid:".posix_getpid().")");
                 }
 
-                $this->doRunEntry($this->closure, $entry);
+                $this->doRunEntry($this->closure, $key, $entry);
                 exit(0);
             }
         }
@@ -87,9 +89,16 @@ class ParallelManager
         }
     }
 
-    protected function doRunEntry($closure, $entry)
+    protected function doRunEntry($closure, $key, $entry)
     {
-        call_user_func($closure, $entry);
+        $ref = new ReflectionFunction($closure);
+        $numberOfParameters = $ref->getNumberOfParameters();
+
+        if ($numberOfParameters == 1) {
+            call_user_func($closure, $entry);
+        } else {
+            call_user_func($closure, $key, $entry);
+        }
     }
 
     public function signalHandler($signo)
