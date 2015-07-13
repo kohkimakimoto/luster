@@ -20,7 +20,7 @@ class Factory
 
     public function run($cmd)
     {
-        $outoput = $this->app["console.output"];
+        $output = $this->app["console.output"];
 
         return $this->make($cmd)->run(function ($type, $buffer) use ($output) {
             $output->write($buffer);
