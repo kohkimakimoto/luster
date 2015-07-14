@@ -12,6 +12,13 @@ use Kohkimakimoto\Luster\Foundation\Application;
 
 $app = new Application("luster", "5.0.x");
 $app->setBasePath(realpath(__DIR__."/.."));
+$app->register([
+    'Kohkimakimoto\Luster\Process\ProcessServiceProvider',
+]);
+$app->setAliases([
+    'Process' => 'Kohkimakimoto\Luster\Process\Facades\Process',
+]);
+
 $app->command([
     'Kohkimakimoto\Luster\Commands\InitCommand'
 ]);

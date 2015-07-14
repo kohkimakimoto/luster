@@ -22,14 +22,14 @@ class Remote
     public function run(array $options, $commandline)
     {
         if (is_array($commandline)) {
-            $commandline = implode(" && ", $commandline);
+            $commandline = implode(' && ', $commandline);
         }
 
         $realCommand = $this->compileRealCommand($commandline, $options);
 
         $ssh = $this->server->getSSHConnection();
-        if (isset($options["timeout"])) {
-            $ssh->setTimeout($options["timeout"]);
+        if (isset($options['timeout'])) {
+            $ssh->setTimeout($options['timeout']);
         } else {
             $ssh->setTimeout(null);
         }
@@ -46,7 +46,7 @@ class Remote
 
         $output = $this->output;
         $errOutput = null;
-        if($output instanceof ConsoleOutputInterface) {
+        if ($output instanceof ConsoleOutputInterface) {
             $errOutput = $output->getErrorOutput();
         }
 
@@ -75,29 +75,30 @@ class Remote
 
     protected function compileRealCommand($commandline, $options)
     {
-        $realCommand = "";
+        $realCommand = '';
         $os = php_uname('s');
-        if (preg_match('/Windows/i', $os)){
-            if (isset($options["user"])) {
-                $realCommand .= 'runas /user:' . $options["user"] . ' ';
+        if (preg_match('/Windows/i', $os)) {
+            if (isset($options['user'])) {
+                $realCommand .= 'runas /user:'.$options['user'].' ';
             }
             $realCommand .= 'cmd.exe /C "';
-            if (isset($options["cwd"])) {
-                $realCommand .= 'cd ' . $options["cwd"] . ' & ';
+            if (isset($options['cwd'])) {
+                $realCommand .= 'cd '.$options['cwd'].' & ';
             }
             $realCommand .= str_replace('"', '\"', $commandline);
             $realCommand .= '"';
         } else {
-            if (isset($options["user"])) {
-                $realCommand .= 'sudo -u' . $options["user"] . ' TERM=dumb ';
+            if (isset($options['user'])) {
+                $realCommand .= 'sudo -u'.$options['user'].' TERM=dumb ';
             }
             $realCommand .= 'bash -l -c "';
-            if (isset($options["cwd"])) {
-                $realCommand .= 'cd ' . $options["cwd"] . ' && ';
+            if (isset($options['cwd'])) {
+                $realCommand .= 'cd '.$options['cwd'].' && ';
             }
             $realCommand .= str_replace('"', '\"', $commandline);
             $realCommand .= '"';
         }
+
         return $realCommand;
     }
 }

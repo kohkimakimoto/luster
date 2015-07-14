@@ -18,34 +18,34 @@ class Server
 
     public function __construct(array $params = [])
     {
-        if (isset($params["host"])) {
-            $this->host = $params["host"];
+        if (isset($params['host'])) {
+            $this->host = $params['host'];
         }
 
-        if (isset($params["port"])) {
-            $this->port = $params["port"];
+        if (isset($params['port'])) {
+            $this->port = $params['port'];
         } else {
-            $this->port = "22";
+            $this->port = '22';
         }
 
-        if (isset($params["user"])) {
-            $this->user = $params["user"];
+        if (isset($params['user'])) {
+            $this->user = $params['user'];
         } else {
             $this->user = get_current_user();
         }
 
-        if (isset($params["key"])) {
-            $this->key = $params["key"];
+        if (isset($params['key'])) {
+            $this->key = $params['key'];
         } else {
-            $this->key = getenv("HOME")."/.ssh/id_rsa";
+            $this->key = getenv('HOME').'/.ssh/id_rsa';
         }
 
-        if (isset($params["key_passphrage"])) {
-            $this->keyPassphrage = $params["key_passphrage"];
+        if (isset($params['key_passphrage'])) {
+            $this->keyPassphrage = $params['key_passphrage'];
         }
 
-        if (isset($params["use_agent"])) {
-            $this->useAgent = $params["use_agent"];
+        if (isset($params['use_agent'])) {
+            $this->useAgent = $params['use_agent'];
         } else {
             $this->useAgent = false;
         }
@@ -81,8 +81,8 @@ class Server
         // login
         if (!$ssh->login($this->user, $key)) {
             $err = error_get_last();
-            $emessage = isset($err['message']) ? $err['message'] : "";
-            throw new \RuntimeException('Unable to login '.$this->user.". ".$emessage);
+            $emessage = isset($err['message']) ? $err['message'] : '';
+            throw new \RuntimeException('Unable to login '.$this->user.'. '.$emessage);
         }
 
         return $ssh;

@@ -4,7 +4,6 @@ namespace Test\Kohkimakimoto\Luster\Remote;
 
 use Kohkimakimoto\Luster\Foundation\Application;
 use Kohkimakimoto\Luster\Remote\Facades\Remote;
-use Kohkimakimoto\Luster\Remote\Server;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 

@@ -26,5 +26,4 @@ class Communicator
 
         return $remote->run($options, $command);
     }
-
 }

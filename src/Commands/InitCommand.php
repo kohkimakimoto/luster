@@ -13,8 +13,15 @@ class InitCommand extends Command
     public function fire()
     {
         $filesystem = $this->laravel['files'];
-
         $rootDir = getcwd();
+
+        $composerJson = json_decode(file_get_contents($rootDir."/composer.json"), true);
+        if (!$composerJson) {
+            throw new \RuntimeException("Could not load ${rootDir}/composer.json");
+        }
+
+        $commandName = basename($rootDir);
+        $commandName = $this->ask("Input your cli app name (default: $commandName) ", $commandName);
 
         // binDir
         $binDir = $rootDir.'/bin';
@@ -23,7 +30,6 @@ class InitCommand extends Command
             $this->output->writeln('<info>Created <comment>'.$binDir.'</comment></info>');
         }
 
-        $commandName = 'cmd';
         $binCommandFile = $binDir.'/'.$commandName;
         if (!$filesystem->exists($binCommandFile)) {
             $contents = <<<EOF
@@ -41,7 +47,7 @@ use Kohkimakimoto\Luster\Foundation\Application;
     // 'Illuminate\Database\SeedServiceProvider',
     // 'Kohkimakimoto\Luster\Process\ProcessServiceProvider',
 ]);
-$app->setAliases([
+\$app->setAliases([
     // 'Process' => 'Kohkimakimoto\Luster\Process\Facades\Process',
 ]);
 
@@ -114,5 +120,13 @@ EOF;
             $filesystem->makeDirectory($srcDir, 0755, true);
             $this->output->writeln('<info>Created <comment>'.$srcDir.'</comment></info>');
         }
+
+        // udpate composer.json
+        $composerJson = array_replace_recursive($composerJson, [
+            "autoload" => ["psr-4" => ["App\\" => "src/"]],
+            "bin" => ["bin/$commandName"]
+        ]);
+        file_put_contents($rootDir."/composer.json", json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->output->writeln('<info>Updated <comment>'.$rootDir."/composer.json".'</comment></info>');
     }
 }

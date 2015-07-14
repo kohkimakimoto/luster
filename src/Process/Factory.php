@@ -21,10 +21,10 @@ class Factory
 
     public function run($cmd)
     {
-        $output = $this->app["console.output"];
+        $output = $this->app['console.output'];
 
         $errOutput = null;
-        if($output instanceof ConsoleOutputInterface) {
+        if ($output instanceof ConsoleOutputInterface) {
             $errOutput = $output->getErrorOutput();
         }
 
