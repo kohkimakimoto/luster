@@ -3,6 +3,7 @@
 namespace Kohkimakimoto\Luster\Process;
 
 use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
 class Factory
 {
@@ -22,8 +23,17 @@ class Factory
     {
         $output = $this->app["console.output"];
 
-        return $this->make($cmd)->run(function ($type, $buffer) use ($output) {
-            $output->write($buffer);
+        $errOutput = null;
+        if($output instanceof ConsoleOutputInterface) {
+            $errOutput = $output->getErrorOutput();
+        }
+
+        return $this->make($cmd)->run(function ($type, $buffer) use ($output, $errOutput) {
+            if (Process::ERR === $type && $errOutput) {
+                $errOutput->write($buffer);
+            } else {
+                $output->write($buffer);
+            }
         });
     }
 }

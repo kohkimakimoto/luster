@@ -6,11 +6,13 @@ class Result
 {
     protected $returnCode;
     protected $contents;
+    protected $errorContents;
 
-    public function __construct($returnCode, $contents)
+    public function __construct($returnCode, $contents, $errorContents)
     {
         $this->returnCode = $returnCode;
         $this->contents = $contents;
+        $this->errorContents = $errorContents;
     }
 
     public function isFailed()
@@ -35,6 +37,16 @@ class Result
     public function contents()
     {
         return $this->getContents();
+    }
+
+    public function getErrorContents()
+    {
+        return $this->contents;
+    }
+
+    public function errorContents()
+    {
+        return $this->getErrorContents();
     }
 
     public function __toString()

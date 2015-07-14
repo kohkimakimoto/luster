@@ -2,6 +2,8 @@
 
 namespace Kohkimakimoto\Luster\Remote;
 
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
+
 class Remote
 {
     protected $server;
@@ -43,16 +45,27 @@ class Remote
         }
 
         $output = $this->output;
-        $resultContent = null;
+        $errOutput = null;
+        if($output instanceof ConsoleOutputInterface) {
+            $errOutput = $output->getErrorOutput();
+        }
 
-        $ssh->exec($realCommand, function ($buffer) use ($output, &$resultContent) {
-            $output->write($buffer);
-            $resultContent .= $buffer;
+        $resultContent = null;
+        $resultErrContent = null;
+
+        $ssh->exec($realCommand, function ($buffer) use ($output, $errOutput, &$resultContent, &$resultErrContent) {
+            if (Process::ERR === $type && $errOutput) {
+                $errOutput->write($buffer);
+                $resultErrContent .= $buffer;
+            } else {
+                $output->write($buffer);
+                $resultContent .= $buffer;
+            }
         });
 
         $returnCode = $ssh->getExitStatus();
 
-        $result = new Result($returnCode, $resultContent);
+        $result = new Result($returnCode, $resultContent, $resultErrContent);
         if ($result->isFailed()) {
             $output->writeln($result->getContents());
         }
