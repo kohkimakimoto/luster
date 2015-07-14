@@ -11,8 +11,12 @@ class Communicator
         $this->app = $app;
     }
 
-    public function run(Server $server, $options, $command = null)
+    public function run($server, $options, $command = null)
     {
+        if (is_array($server)) {
+            $server = new Server($server);
+        }
+
         $remote = new Remote(
             $server,
             $this->app['console.input'],
