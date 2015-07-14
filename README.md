@@ -95,7 +95,6 @@ $app->command([
 $app->run();
 ```
 
-
 Uncomment the line inside of `$app->command([...])` method.
 
 ```php
