@@ -53,15 +53,16 @@ class Remote
         $resultContent = null;
         $resultErrContent = null;
 
-        $ssh->exec($realCommand, function ($buffer) use ($output, $errOutput, &$resultContent, &$resultErrContent) {
-            if (Process::ERR === $type && $errOutput) {
-                $errOutput->write($buffer);
-                $resultErrContent .= $buffer;
-            } else {
-                $output->write($buffer);
-                $resultContent .= $buffer;
-            }
+        $ssh->enableQuietMode();
+        $ssh->exec($realCommand, function ($buffer) use ($output, &$resultContent) {
+            $output->write($buffer);
+            $resultContent .= $buffer;
         });
+
+        $resultErrContent = $ssh->getStdError();
+        if ($resultErrContent) {
+            $errOutput->write($resultErrContent);
+        }
 
         $returnCode = $ssh->getExitStatus();
 

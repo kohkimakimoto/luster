@@ -16,6 +16,8 @@ class Server
 
     public $useAgent;
 
+    public $pty;
+
     public function __construct(array $params = [])
     {
         if (isset($params['host'])) {
@@ -49,6 +51,12 @@ class Server
         } else {
             $this->useAgent = false;
         }
+
+        if (isset($params['pty'])) {
+            $this->pty = $params['pty'];
+        } else {
+            $this->pty = false;
+        }
     }
 
     public function getSSHConnection()
@@ -78,6 +86,10 @@ class Server
             }
         }
 
+        if ($this->pty) {
+            $ssh->enablePTY();
+        }
+        
         // login
         if (!$ssh->login($this->user, $key)) {
             $err = error_get_last();
