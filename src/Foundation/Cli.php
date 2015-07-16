@@ -169,6 +169,12 @@ class Cli extends SymfonyApplication implements ApplicationContract
         $this->laravel->instance('console.input', $input);
         $this->laravel->instance('console.output', $output);
 
-        return parent::doRun($input, $output);
+        $this->laravel['app']->doBefore();
+
+        $ret = parent::doRun($input, $output);
+
+        $this->laravel['app']->doAfter();
+
+        return $ret;
     }
 }

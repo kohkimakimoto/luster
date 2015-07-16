@@ -71,6 +71,10 @@ class Application extends Container implements LaravelApplicationContract
      */
     protected $environmentFile = '.env';
 
+    protected $beforeFunc;
+
+    protected $afterFunc;
+
     protected static $registeredAliases = [];
 
     /**
@@ -234,7 +238,22 @@ class Application extends Container implements LaravelApplicationContract
 
     public function environment()
     {
-        return $this['env'];
+		if (func_num_args() > 0)
+		{
+			$patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
+
+			foreach ($patterns as $pattern)
+			{
+				if (str_is($pattern, $this['env']))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		return $this['env'];
     }
 
     /**
@@ -458,6 +477,16 @@ class Application extends Container implements LaravelApplicationContract
         $this->add($command);
     }
 
+    public function before($closure)
+    {
+        $this->beforeFunc = $closure;
+    }
+
+    public function after($closure)
+    {
+        $this->afterFunc = $closure;
+    }
+
     protected function detectEnvironment()
     {
         try {
@@ -477,6 +506,22 @@ class Application extends Container implements LaravelApplicationContract
         }
 
         $this['env'] = $env;
+    }
+
+    public function doBefore()
+    {
+        if ($this->beforeFunc) {
+            $func = $this->beforeFunc;
+            $func($this);
+        }
+    }
+
+    public function doAfter()
+    {
+        if ($this->afterFunc) {
+            $func = $this->afterFunc;
+            $func($this);
+        }
     }
 
     public function run()

@@ -18,9 +18,13 @@ $app->register([
 $app->setAliases([
     'Process' => 'Kohkimakimoto\Luster\Process\Facades\Process',
 ]);
-
 $app->command([
     'Kohkimakimoto\Luster\Commands\InitCommand'
 ]);
+$app->before(function($app){
 
+    echo $app->environment();
+    exit;
+
+});
 $app->run();

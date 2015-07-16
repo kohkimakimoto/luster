@@ -90,7 +90,7 @@ class Remote
             $realCommand .= '"';
         } else {
             if (isset($options['user'])) {
-                $realCommand .= 'sudo -u'.$options['user'].' TERM=dumb ';
+                $realCommand .= 'sudo -u'.$options['user'].' ';
             }
             $realCommand .= 'bash -l -c "';
             if (isset($options['cwd'])) {
