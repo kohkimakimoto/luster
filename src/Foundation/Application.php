@@ -238,21 +238,6 @@ class Application extends Container implements LaravelApplicationContract
 
     public function environment()
     {
-		if (func_num_args() > 0)
-		{
-			$patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
-
-			foreach ($patterns as $pattern)
-			{
-				if (str_is($pattern, $this['env']))
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
 		return $this['env'];
     }
 
