@@ -238,6 +238,7 @@ class Application extends Container implements LaravelApplicationContract
 
     public function environment()
     {
+
 		return $this['env'];
     }
 
