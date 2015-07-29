@@ -510,7 +510,7 @@ class Application extends Container implements LaravelApplicationContract
         }
     }
 
-    public function run()
+    public function init()
     {
         $this->detectEnvironment();
         $this->loadConfiguration();
@@ -518,7 +518,11 @@ class Application extends Container implements LaravelApplicationContract
         foreach ($this->loadedProviders as $name => $provider) {
             $provider->boot();
         }
+    }
 
+    public function run()
+    {
+        $this->init();
         return $this['cli']->run();
     }
 }
